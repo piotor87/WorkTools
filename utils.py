@@ -125,13 +125,13 @@ def basic_iterator(f,separator ='\t',skiprows = 0,count = False,columns = 'all')
     if count is False:
         for line in i:
             line =line.strip().split(separator)
-            line = return_columns(line)
+            line = return_columns(line,columns)
             yield line
     else:
         row = 0
         for line in i:
             line =line.strip().split(separator)
-            line = return_columns(line)
+            line = return_columns(line,columns)
             row += 1   
             yield row,line
 
