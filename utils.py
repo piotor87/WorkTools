@@ -36,11 +36,6 @@ def timing_function(some_function):
     return wrapper
 
 
-def write_iterable_to_file(f,iterable):
-    with open(f,'wt') as o:
-        for elem in iterable:
-            o.write(elem + 'n')
-
 def make_sure_path_exists(path):
     import errno
     try:
