@@ -129,15 +129,13 @@ def basic_iterator(f,separator ='\t',skiprows = 0,count = False,columns = 'all')
             line = return_columns(line,columns)
             row += 1   
             yield row,line
-
-        
 def return_columns(l,columns):
     '''
     Returns all columns, or rather the elements, provided the columns
     '''
     if columns == 'all':
         return l
-    elif len(columns) == 1:
+    elif type(columns) == int:
         return l[columns]
-    else:
-        return map(l.__getitem__,columns)
+    elif type(columns) == list:
+        return list(map(l.__getitem__,columns))
