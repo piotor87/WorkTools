@@ -12,6 +12,14 @@ mem_bytes = os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES')  # e.g. 401
 mem_mib = mem_bytes/(1024.**2) 
 proc_mem = mem_mib / (cpus +1)
 
+
+import git
+
+def git_pull():
+    g = git.cmd.Git(os.getcwd())
+    g.pull()
+
+
 def progressBar(value, endvalue, bar_length=20):
 
     percent = float(value) / endvalue
