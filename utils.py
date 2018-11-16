@@ -19,6 +19,25 @@ def git_pull():
     g = git.cmd.Git(os.getcwd())
     g.pull()
 
+def return_open_func(f):
+    import gzip
+    from functools import partial
+
+    file_path,file_root,file_extension = get_path_info(f)
+    print(file_extension)
+
+    if 'bgz' in file_extension:
+        print('gzip.open with rb mode')
+        open_func = partial(gzip.open, mode = 'rb')
+    
+    elif 'gz' in file_extension:
+        print('gzip.open with rt mode')
+        open_func = partial(gzip.open, mode = 'rt')
+
+    else:
+        print('regular open')
+        open_func = open      
+    return open_func
 
 def progressBar(value, endvalue, bar_length=20):
 
