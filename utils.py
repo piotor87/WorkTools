@@ -20,6 +20,9 @@ def git_pull():
     g.pull()
 
 def return_open_func(f):
+    '''
+    Detects file extension and return proper open_func
+    '''
     import gzip
     from functools import partial
 
@@ -40,6 +43,9 @@ def return_open_func(f):
     return open_func
 
 def progressBar(value, endvalue, bar_length=20):
+    '''
+    Writes progress bar, given value (eg.current row) and endvalue(eg. total number of rows)
+    '''
 
     percent = float(value) / endvalue
     arrow = '-' * int(round(percent * bar_length)-1) + '>'
@@ -73,6 +79,9 @@ def make_sure_path_exists(path):
 
 
 def file_exists(fname):
+    '''
+    Function to pass to type in argparse
+    '''
     if os.path.isfile(fname):
         return str(fname)
     else:
