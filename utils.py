@@ -18,7 +18,13 @@ import git
 def git_pull():
     g = git.cmd.Git(os.getcwd())
     g.pull()
-
+    
+def get_path_info(path):
+    file_path = os.path.dirname(path)
+    basename = os.path.basename(path)
+    file_root, file_extension = os.path.splitext(basename)
+    return file_path,file_root,file_extension
+    
 def return_open_func(f):
     '''
     Detects file extension and return proper open_func
