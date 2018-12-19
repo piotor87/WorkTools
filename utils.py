@@ -59,6 +59,15 @@ def progressBar(value, endvalue, bar_length=20):
 
     sys.stdout.write("\rPercent: [{0}] {1}%".format(arrow + spaces, int(round(percent * 100))))
     sys.stdout.flush()
+
+
+
+def identify_separator(line):
+    import csv
+
+    sniffer = csv.Sniffer()
+    dialect = sniffer.sniff(line)
+    return dialect.delimiter
     
 def timing_function(some_function):
 
