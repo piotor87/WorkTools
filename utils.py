@@ -3,10 +3,10 @@ import sys
 import os
 import numpy as np
 import mmap
-import multiprocessing
 import time
 import subprocess
 
+import multiprocessing
 cpus = multiprocessing.cpu_count()
 
 mem_bytes = os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES')  # e.g. 4015976448
