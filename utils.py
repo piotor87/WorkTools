@@ -5,6 +5,7 @@ import numpy as np
 import mmap
 import multiprocessing
 import time
+import subprocess
 
 cpus = multiprocessing.cpu_count()
 
@@ -190,3 +191,16 @@ def return_columns(l,columns):
         return l[columns]
     elif type(columns) == list:
         return list(map(l.__getitem__,columns))
+
+def tmp_bash(cmd):
+    from tempfile import NamedTemporaryFile
+
+    scriptFile = NamedTemporaryFile(delete=True)
+    with open(scriptFile.name, 'w') as f:
+        f.write("#!/bin/bash\n")
+        f.write(cmd + "\n")
+
+    os.chmod(scriptFile.name,0o777)
+    scriptFile.file.close()
+    subprocess.check_call(scriptFile.name)
+    
