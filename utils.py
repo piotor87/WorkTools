@@ -220,8 +220,8 @@ def pad(s):
 def return_header(f):
 
     open_func = return_open_func(f)
-    delimiter = identify_separator(f)
-
-    with open_func(f) as i:header = i.readline().strip().split(delimiter)
+    with open_func(f) as i:header = i.readline().strip()
+    delimiter = identify_separator(header)
+    header = header.split(delimiter)
     return header
         
