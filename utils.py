@@ -37,15 +37,15 @@ def return_open_func(f):
     print(file_extension)
 
     if 'bgz' in file_extension:
-        print('gzip.open with rb mode')
+        #print('gzip.open with rb mode')
         open_func = partial(gzip.open, mode = 'rb')
     
     elif 'gz' in file_extension:
-        print('gzip.open with rt mode')
+        #print('gzip.open with rt mode')
         open_func = partial(gzip.open, mode = 'rt')
 
     else:
-        print('regular open')
+        #print('regular open')
         open_func = open      
     return open_func
 
@@ -217,3 +217,11 @@ def pad(s):
     '''
     return ' ' + str(s) + ' '
 
+def return_header(f):
+
+    open_func = return_open_func(f)
+    delimiter = identify_separator(f)
+
+    with open_func(f) as i:header = i.readline().strip().split(delimiter)
+    return header
+        
