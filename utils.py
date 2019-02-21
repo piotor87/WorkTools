@@ -225,3 +225,11 @@ def return_header(f):
     header = header.split(delimiter)
     return header
         
+        
+def valid_string(s):
+    if s:
+        return s
+    else:
+        print('Invalid String')
+        sys.exit(1)
+        
