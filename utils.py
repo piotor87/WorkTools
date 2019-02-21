@@ -233,3 +233,10 @@ def valid_string(s):
         print('Invalid String')
         sys.exit(1)
         
+
+def merge_files(o_file,file_list):
+    with open(o_file,'wt') as o:
+        for f in file_list:
+            with open(f,'rt') as i:
+                for line in i:
+                    o.write(line)
