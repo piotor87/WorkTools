@@ -28,7 +28,6 @@ def return_open_func(f):
    
 
     file_path,file_root,file_extension = get_path_info(f)
-    print(file_extension)
 
     if 'bgz' in file_extension:
         #print('gzip.open with rb mode')
