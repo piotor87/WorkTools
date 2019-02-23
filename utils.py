@@ -1,11 +1,6 @@
-import time
-import sys
-import os
+import time,sys,os,mmap,gzip,subprocess
 import numpy as np
-import mmap
-import time
-import subprocess
-
+from functools import partial
 import multiprocessing
 cpus = multiprocessing.cpu_count()
 
@@ -30,8 +25,7 @@ def return_open_func(f):
     '''
     Detects file extension and return proper open_func
     '''
-    import gzip
-    from functools import partial
+   
 
     file_path,file_root,file_extension = get_path_info(f)
     print(file_extension)
@@ -161,12 +155,9 @@ def basic_iterator(f,separator ='\t',skiprows = 0,count = False,columns = 'all')
     '''
     Function that iterates through a file and returns each line as a list with separator being used to split.
     '''
-    if f.split('.')[-1] != 'gz':
-        i = open(f,'rt')
 
-    elif f.split('.')[-1] == 'gz':
-        i = gzip.open(f,'rt')
-
+    open_func = return_open_func(f)
+    i = open_func(f)
     for x in range(skiprows):next(i)
 
     if count is False:
