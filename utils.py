@@ -182,7 +182,7 @@ def return_columns(l,columns):
     elif type(columns) == list:
         return list(map(l.__getitem__,columns))
 
-def tmp_bash(cmd):
+def tmp_bash(cmd,check = False):
     from tempfile import NamedTemporaryFile
 
     scriptFile = NamedTemporaryFile(delete=True)
@@ -192,7 +192,10 @@ def tmp_bash(cmd):
 
     os.chmod(scriptFile.name,0o777)
     scriptFile.file.close()
-    subprocess.check_call(scriptFile.name)
+    if check:
+        subprocess.check_call(scriptFile.name)
+    else:
+        subprocess.call(scriptFile.name)
     
 def natural_sort(l):
     import re
