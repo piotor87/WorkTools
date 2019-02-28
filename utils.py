@@ -192,11 +192,11 @@ def tmp_bash(cmd,check = False):
 
     os.chmod(scriptFile.name,0o777)
     scriptFile.file.close()
-    
+    subprocess.call(['cat',scriptFile.name])
     if check:
-        subprocess.check_call(scriptFile.name,shell = True)
+        subprocess.check_call(scriptFile.name)
     else:
-        subprocess.call(scriptFile.name,shell = True)
+        subprocess.call(scriptFile.name)
     
 def natural_sort(l):
     import re
