@@ -196,7 +196,7 @@ def tmp_bash(cmd,check = False):
     if check:
         subprocess.check_call(scriptFile.name)
     else:
-        subprocess.call(scriptFile.name,stderr = devnull)
+        subprocess.call(scriptFile.name,stderr = subprocess.DEVNULL)
 
 def natural_sort(l):
     import re
