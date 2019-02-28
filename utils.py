@@ -190,7 +190,7 @@ def tmp_bash(cmd,check = False):
         f.write("#!/bin/bash\n")
         f.write(cmd + "\n")
 
-    os.chmod(scriptFile.name,0777)
+    os.chmod(scriptFile.name,0o777)
     scriptFile.file.close()
     if check:
         subprocess.check_call(scriptFile.name)
