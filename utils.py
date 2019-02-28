@@ -190,14 +190,15 @@ def tmp_bash(cmd,check = False):
         f.write("#!/bin/bash\n")
         f.write(cmd + "\n")
 
-    os.chmod(scriptFile.name,0o777)
+    #os.chmod(scriptFile.name,0o777)
     scriptFile.file.close()
-    subprocess.call(['cat',scriptFile.name])
+
     if check:
-        subprocess.check_call(scriptFile.name)
+        subprocess.check_call(['bash',scriptFile.name])
+
     else:
-        subprocess.call(scriptFile.name)
-    
+        subprocess.call(['bash',scriptFile.name])
+
 def natural_sort(l):
     import re
     convert = lambda text: int(text) if text.isdigit() else text.lower() 
