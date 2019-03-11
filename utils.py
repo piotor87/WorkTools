@@ -242,3 +242,11 @@ def merge_files(o_file,file_list):
             with open(f,'rt') as i:
                 for line in i:
                     o.write(line)
+
+def make_sure_path_exists(path):
+    import errno
+    try:
+        os.makedirs(path)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST:
+            raise                
