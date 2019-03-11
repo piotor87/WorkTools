@@ -14,13 +14,7 @@ import git
 def git_pull():
     g = git.cmd.Git(os.getcwd())
     g.pull()
-    
-def get_path_info(path):
-    file_path = os.path.dirname(path)
-    basename = os.path.basename(path)
-    file_root, file_extension = os.path.splitext(basename)
-    return file_path,file_root,file_extension
-    
+
 def return_open_func(f):
     '''
     Detects file extension and return proper open_func
@@ -77,15 +71,32 @@ def timing_function(some_function):
 
     return wrapper
 
+def get_filepaths(directory):
+    """
+    This function will generate the file names in a directory 
+    tree by walking the tree either top-down or bottom-up. For each 
+    directory in the tree rooted at directory top (including top itself), 
+    it yields a 3-tuple (dirpath, dirnames, filenames).
+    """
+    file_paths = []  # List which will store all of the full filepaths.
 
-def make_sure_path_exists(path):
-    import errno
-    try:
-        os.makedirs(path)
-    except OSError as exception:
-        if exception.errno != errno.EEXIST:
-            raise                
+    # Walk the tree.
+    for root, directories, files in os.walk(directory):
+        for filename in files:
+            # Join the two strings in order to form the full filepath.
+            filepath = os.path.join(root, filename)
+            file_paths.append(filepath)  # Add it to the list.
 
+    return file_paths  # Self-explanatory.
+
+
+    
+def get_path_info(path):
+    file_path = os.path.dirname(path)
+    basename = os.path.basename(path)
+    file_root, file_extension = os.path.splitext(basename)
+    return file_path,file_root,file_extension
+    
 
 def file_exists(fname):
     '''
@@ -96,10 +107,7 @@ def file_exists(fname):
     else:
         print('File does not exist')
         sys.exit(1)
-
-
-
-    
+ 
 
 def pretty_print(string,l = 30):
     l = l-int(len(string)/2)
