@@ -1,11 +1,6 @@
-import time
-import sys
-import os
+import time,sys,os,mmap,gzip,subprocess
 import numpy as np
-import mmap
-import time
-import subprocess
-
+from functools import partial
 import multiprocessing
 cpus = multiprocessing.cpu_count()
 
@@ -19,22 +14,14 @@ import git
 def git_pull():
     g = git.cmd.Git(os.getcwd())
     g.pull()
-    
-def get_path_info(path):
-    file_path = os.path.dirname(path)
-    basename = os.path.basename(path)
-    file_root, file_extension = os.path.splitext(basename)
-    return file_path,file_root,file_extension
-    
+
 def return_open_func(f):
     '''
     Detects file extension and return proper open_func
     '''
-    import gzip
-    from functools import partial
+   
 
     file_path,file_root,file_extension = get_path_info(f)
-    print(file_extension)
 
     if 'bgz' in file_extension:
         #print('gzip.open with rb mode')
@@ -84,15 +71,32 @@ def timing_function(some_function):
 
     return wrapper
 
+def get_filepaths(directory):
+    """
+    This function will generate the file names in a directory 
+    tree by walking the tree either top-down or bottom-up. For each 
+    directory in the tree rooted at directory top (including top itself), 
+    it yields a 3-tuple (dirpath, dirnames, filenames).
+    """
+    file_paths = []  # List which will store all of the full filepaths.
 
-def make_sure_path_exists(path):
-    import errno
-    try:
-        os.makedirs(path)
-    except OSError as exception:
-        if exception.errno != errno.EEXIST:
-            raise                
+    # Walk the tree.
+    for root, directories, files in os.walk(directory):
+        for filename in files:
+            # Join the two strings in order to form the full filepath.
+            filepath = os.path.join(root, filename)
+            file_paths.append(filepath)  # Add it to the list.
 
+    return file_paths  # Self-explanatory.
+
+
+    
+def get_path_info(path):
+    file_path = os.path.dirname(path)
+    basename = os.path.basename(path)
+    file_root, file_extension = os.path.splitext(basename)
+    return file_path,file_root,file_extension
+    
 
 def file_exists(fname):
     '''
@@ -103,10 +107,7 @@ def file_exists(fname):
     else:
         print(fname + ' does not exist')
         sys.exit(1)
-
-
-
-    
+ 
 
 def pretty_print(string,l = 30):
     l = l-int(len(string)/2)
@@ -161,12 +162,9 @@ def basic_iterator(f,separator ='\t',skiprows = 0,count = False,columns = 'all')
     '''
     Function that iterates through a file and returns each line as a list with separator being used to split.
     '''
-    if f.split('.')[-1] != 'gz':
-        i = open(f,'rt')
 
-    elif f.split('.')[-1] == 'gz':
-        i = gzip.open(f,'rt')
-
+    open_func = return_open_func(f)
+    i = open_func(f)
     for x in range(skiprows):next(i)
 
     if count is False:
@@ -192,7 +190,7 @@ def return_columns(l,columns):
     elif type(columns) == list:
         return list(map(l.__getitem__,columns))
 
-def tmp_bash(cmd):
+def tmp_bash(cmd,check = False):
     from tempfile import NamedTemporaryFile
 
     scriptFile = NamedTemporaryFile(delete=True)
@@ -202,8 +200,12 @@ def tmp_bash(cmd):
 
     os.chmod(scriptFile.name,0o777)
     scriptFile.file.close()
-    subprocess.check_call(scriptFile.name)
-    
+
+    if check:
+        subprocess.check_call(scriptFile.name)
+    else:
+        subprocess.call(scriptFile.name,stderr = subprocess.DEVNULL)
+
 def natural_sort(l):
     import re
     convert = lambda text: int(text) if text.isdigit() else text.lower() 
@@ -240,3 +242,11 @@ def merge_files(o_file,file_list):
             with open(f,'rt') as i:
                 for line in i:
                     o.write(line)
+
+def make_sure_path_exists(path):
+    import errno
+    try:
+        os.makedirs(path)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST:
+            raise                
