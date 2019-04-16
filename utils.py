@@ -101,7 +101,7 @@ def file_exists(fname):
     if os.path.isfile(fname):
         return str(fname)
     else:
-        print('File does not exist')
+        print(fname + ' does not exist')
         sys.exit(1)
 
 
