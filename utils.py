@@ -9,12 +9,6 @@ mem_mib = mem_bytes/(1024.**2)
 proc_mem = mem_mib / (cpus +1)
 
 
-import git
-
-def git_pull():
-    g = git.cmd.Git(os.getcwd())
-    g.pull()
-
 def return_open_func(f):
     '''
     Detects file extension and return proper open_func
