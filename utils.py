@@ -108,8 +108,17 @@ def pretty_print(string,l = 30):
     print('-'*l + '> ' + string + ' <' + '-'*l)
     
 
-
 def mapcount(filename):
+
+    if not os.path.isfile(filename):
+        raise ValueError("File doesn't exist")
+    
+    try:
+        return count_lines(filename)
+    except:
+        return 0
+    
+def count_lines(filename):
     '''
     Counts line in file
     '''
