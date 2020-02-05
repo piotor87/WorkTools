@@ -1,7 +1,7 @@
 import time,sys,os,mmap,gzip,subprocess
 import numpy as np
 from functools import partial
-import multiprocessing
+import multiprocessing,csv 
 cpus = multiprocessing.cpu_count()
 
 mem_bytes = os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES')  # e.g. 4015976448
@@ -45,7 +45,6 @@ def progressBar(value, endvalue, bar_length=20):
 
 
 def identify_separator(f):
-    import csv
     open_func = return_open_func(f)
     with open_func(f) as i:header = i.readline().strip()
     sniffer = csv.Sniffer()
@@ -227,7 +226,8 @@ def pad(s):
     return ' ' + str(s) + ' '
 
 def return_header(f):
-
+    open_func = return_open_func(f)
+    with open_func(f) as i:header = i.readline().strip()
     delimiter = identify_separator(f)
     header = header.split(delimiter)
     return header
