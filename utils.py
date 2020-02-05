@@ -44,11 +44,12 @@ def progressBar(value, endvalue, bar_length=20):
 
 
 
-def identify_separator(line):
+def identify_separator(f):
     import csv
-
+    open_func = return_open_func(f)
+    with open_func(f) as i:header = i.readline().strip()
     sniffer = csv.Sniffer()
-    dialect = sniffer.sniff(line)
+    dialect = sniffer.sniff(header)
     return dialect.delimiter
     
 def timing_function(some_function):
@@ -137,17 +138,17 @@ class SliceMaker(object):
     def __getitem__(self, item):
         return item
 
-def line_iterator(f,separator ='\t',count = False,columns = SliceMaker()[:],dtype = str,skiprows = 0):
+def line_iterator(f,separator=None,count = False,columns = SliceMaker()[:],dtype = str,skiprows = 0):
     '''
     Function that iterates through a file and returns each line as a list with separator being used to split.
     N.B. it requires that all elements are the same type
     '''
-    if f.split('.')[-1] != 'gz':
-        i = open(f,'rt')
 
-    elif f.split('.')[-1] == 'gz':
-        i = gzip.open(f,'rt')
+    if not separator:
+        separator = identify_separator(f)
 
+    open_func = return_open_func(f)
+    i = open_func(f)
     for x in range(skiprows):next(i)
 
     if count is False:
@@ -161,11 +162,14 @@ def line_iterator(f,separator ='\t',count = False,columns = SliceMaker()[:],dtyp
 
 
 
-def basic_iterator(f,separator ='\t',skiprows = 0,count = False,columns = 'all'):
+def basic_iterator(f,separator =None,skiprows = 0,count = False,columns = 'all'):
     '''
     Function that iterates through a file and returns each line as a list with separator being used to split.
     '''
 
+    if not separator:
+        separator = identify_separator(f)
+        
     open_func = return_open_func(f)
     i = open_func(f)
     for x in range(skiprows):next(i)
@@ -224,9 +228,7 @@ def pad(s):
 
 def return_header(f):
 
-    open_func = return_open_func(f)
-    with open_func(f) as i:header = i.readline().strip()
-    delimiter = identify_separator(header)
+    delimiter = identify_separator(f)
     header = header.split(delimiter)
     return header
         
